@@ -35,6 +35,8 @@ OPTIONS
   --output <path>             Override output path (default: docs/codebase-overview.md)
   --focus <area>              Give extra depth to one area, e.g. --focus "async pipeline"
   --fresh                     Skip merge — write a completely new file from scratch
+  --code-only                 Skip all docs/ files except codebase-overview.md itself;
+                              derive everything purely from codebase exploration
   --with-diagram              Also generate docs/architecture.drawio + Mermaid preview
   --with-diagram=excalidraw   Also generate docs/architecture.excalidraw + Mermaid preview
   --with-diagram=both         Generate draw.io + Excalidraw + Mermaid preview
@@ -43,6 +45,8 @@ OPTIONS
 EXAMPLES
   /codebase-overview
   /codebase-overview --fresh
+  /codebase-overview --code-only
+  /codebase-overview --code-only --fresh
   /codebase-overview --focus "event pipeline"
   /codebase-overview --with-diagram
   /codebase-overview --with-diagram=both --fresh
@@ -68,9 +72,11 @@ Check whether `docs/codebase-overview.md` (or the `--output` path) already exist
 
 ### Step 2 — Read existing docs
 
-Read the following (if present) so the new doc complements rather than duplicates them:
+**If `--code-only` was passed:** skip this step entirely. Do not read any files in `docs/` (other than `codebase-overview.md` itself, which was already read in Step 1 for merge purposes). Rely solely on codebase exploration. This is useful when existing docs are outdated, incomplete, or potentially misleading.
+
+**Otherwise:** read the following (if present) so the new doc complements rather than duplicates them:
 - `CLAUDE.md` / `README.md`
-- All other files in `docs/`
+- All other files in `docs/` (excluding `codebase-overview.md` — already read in Step 1)
 
 ### Step 3 — Detect ML artefacts
 
@@ -175,6 +181,7 @@ If `--with-diagram` is passed without a format value, default to draw.io only.
 - `--output <path>`: Override output file path (default: `docs/codebase-overview.md`)
 - `--focus <area>`: Give extra depth to a specific area (e.g. `--focus "async pipeline"`, `--focus "data layer"`)
 - `--fresh`: Skip merge logic and write a completely fresh file (existing file is overwritten)
+- `--code-only`: Skip reading all files in `docs/` (except `codebase-overview.md` itself). Rely purely on codebase exploration. Use this when existing docs are outdated or you want an unbiased view from the code alone.
 - `--with-diagram`: After writing the overview, also generate architecture diagram files. Generates `docs/architecture.drawio` + `docs/architecture-diagram.md` (Mermaid preview)
 - `--with-diagram=excalidraw`: Same as above but generate `docs/architecture.excalidraw` instead of draw.io
 - `--with-diagram=both`: Generate draw.io + Excalidraw + Mermaid preview
@@ -195,6 +202,12 @@ When the user says "/codebase-overview --output docs/architecture.md", use that 
 
 ### Example 5: Focused depth
 When the user says "/codebase-overview --focus 'event pipeline'", give extra depth to async/event-driven flows while still covering all required sections.
+
+### Example 6: Code-only — ignore existing docs
+When the user says "/codebase-overview --code-only", skip reading any files in `docs/` (other than `codebase-overview.md` itself for merge). Explore the codebase directly and derive all content purely from the source code. Use this when existing docs may be outdated, incomplete, or you want an unbiased view from the code alone.
+
+### Example 7: Code-only fresh start
+When the user says "/codebase-overview --code-only --fresh", ignore all existing docs AND skip the merge — write a completely new file derived purely from the codebase.
 
 ### Example 6: Overview + diagram in one shot (draw.io)
 When the user says "/codebase-overview --with-diagram", generate the full `docs/codebase-overview.md` then immediately generate `docs/architecture.drawio` and `docs/architecture-diagram.md` using the freshly written overview as input. No second codebase exploration needed.
