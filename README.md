@@ -119,60 +119,50 @@ atlas/
 
 ### Global install (available in every project)
 
-Copy commands and skills into your global Claude Code config directory:
+```bash
+curl -fsSL https://raw.githubusercontent.com/your-username/atlas/main/install.sh | bash
+```
+
+Or clone and run locally:
 
 ```bash
-# Commands — available as /command-name in any project
-cp commands/*.md ~/.claude/commands/
-
-# Skills — Claude activates these automatically
-cp -r skills/. ~/.claude/skills/
+git clone https://github.com/your-username/atlas.git
+cd atlas
+./install.sh
 ```
 
-After copying, verify:
+This copies all commands and skills into `~/.claude/` and prints a confirmation:
 
 ```
-~/.claude/
-├── commands/
-│   ├── codebase-overview.md
-│   ├── ask-atlas.md
-│   ├── architecture-diagram.md
-│   ├── ecosystem-overview.md
-│   └── ml-overview.md
-└── skills/
-    ├── index-codebase/
-    │   └── SKILL.md
-    ├── detect-git-changes/
-    │   └── SKILL.md
-    ├── write-overview-doc/
-    │   └── SKILL.md
-    ├── generate-diagram/
-    │   └── SKILL.md
-    └── explore-repo-interface/
-        └── SKILL.md
+Atlas installed successfully.
+  Commands : 5  →  /Users/you/.claude/commands
+  Skills   : 5  →  /Users/you/.claude/skills
+
+Available commands:
+  /ask-atlas
+  /architecture-diagram
+  /codebase-overview
+  /ecosystem-overview
+  /ml-overview
 ```
 
 ### Per-repo install (available only in one project)
 
-Copy into the `.claude/` directory at the root of your repo:
-
 ```bash
-cd /path/to/your-repo
-
-# Commands
-mkdir -p .claude/commands
-cp /path/to/atlas/commands/*.md .claude/commands/
-
-# Skills
-mkdir -p .claude/skills
-cp -r /path/to/atlas/skills/. .claude/skills/
+./install.sh --per-repo
 ```
 
-Commit `.claude/` to source control so the whole team gets Atlas automatically:
+Or point it at a specific repo:
+
+```bash
+./install.sh --per-repo --repo=/path/to/your-repo
+```
+
+Then commit `.claude/` so the whole team gets Atlas automatically:
 
 ```bash
 git add .claude/
-git commit -m "Add Atlas codebase intelligence commands and skills"
+git commit -m "Add Atlas commands and skills"
 ```
 
 ---
