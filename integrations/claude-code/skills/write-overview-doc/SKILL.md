@@ -1,12 +1,12 @@
 ---
 name: write-overview-doc
-description: Read docs/codebase-index.json and write docs/codebase-overview.md — a comprehensive human-readable architecture reference. Use after indexing a codebase to generate or refresh documentation covering repository layout, component map, domain models, E2E flows, data layer, and tricky nuances.
+description: Read .atlas/codebase-index.json and write .atlas/codebase-overview.md — a comprehensive human-readable architecture reference. Use after indexing a codebase to generate or refresh documentation covering repository layout, component map, domain models, E2E flows, data layer, and tricky nuances.
 allowed-tools: Read Write Edit
 ---
 
 # Write Overview Doc
 
-Read `docs/codebase-index.json` and produce `docs/codebase-overview.md` — the comprehensive human-readable architecture reference that gives any engineer an immediate bird's-eye view of the service.
+Read `.atlas/codebase-index.json` and produce `.atlas/codebase-overview.md` — the comprehensive human-readable architecture reference that gives any engineer an immediate bird's-eye view of the service.
 
 ## When to use this skill
 
@@ -17,10 +17,10 @@ Read `docs/codebase-index.json` and produce `docs/codebase-overview.md` — the 
 
 ## Prerequisites
 
-`docs/codebase-index.json` must exist. If it does not, stop and report:
+`.atlas/codebase-index.json` must exist. If it does not, stop and report:
 
 ```
-docs/codebase-index.json not found.
+.atlas/codebase-index.json not found.
 Run the index-codebase skill first (or run /codebase-overview to do both in one step).
 ```
 
@@ -30,14 +30,14 @@ Run the index-codebase skill first (or run /codebase-overview to do both in one 
 
 ### Step 1 — Load the index
 
-Read `docs/codebase-index.json`. This determines:
+Read `.atlas/codebase-index.json`. This determines:
 - Which files feed which sections (`section_file_map`)
 - The component inventory, entities, ID types, and flows already extracted
 - Whether this is a Go / Python / TS / etc. codebase
 
 ### Step 2 — Load existing overview (for merge)
 
-If `docs/codebase-overview.md` already exists AND `--fresh` was NOT passed:
+If `.atlas/codebase-overview.md` already exists AND `--fresh` was NOT passed:
 - Read it in full
 - Parse the `<!-- Last updated: YYYY-MM-DD -->` date from line 1
 - In targeted mode: sections **not** in `--sections` will be kept verbatim
@@ -83,9 +83,9 @@ The output file must begin with:
 
 (Use today's date.)
 
-Then a cross-reference block linking to companion docs (`docs/codebase-index.json`, `docs/architecture-diagram.md` if it exists, `docs/ml-overview.md` if it exists), followed by the full content.
+Then a cross-reference block linking to companion docs (`.atlas/codebase-index.json`, `.atlas/architecture-diagram.md` if it exists, `.atlas/ml-overview.md` if it exists), followed by the full content.
 
-If `docs/` does not exist, create it.
+If `.atlas/` does not exist, create it.
 
 ---
 
@@ -191,7 +191,7 @@ Table of the most important files with single-line purpose. Derive from the inde
 
 ## Parameters
 
-- `--output <path>`: Override output path (default: `docs/codebase-overview.md`)
+- `--output <path>`: Override output path (default: `.atlas/codebase-overview.md`)
 - `--fresh`: Ignore existing file, regenerate all sections from scratch
 - `--sections <section1,section2,...>`: Only regenerate these sections; carry forward all others verbatim (targeted mode)
 - `--focus <area>`: Give extra depth to one area (e.g. `"async pipeline"`, `"data layer"`)

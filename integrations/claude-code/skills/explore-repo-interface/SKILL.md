@@ -63,7 +63,7 @@ TECH PROFILE:
 
 ### Step 1 — Fast path: check for existing index or overview
 
-Check for `docs/codebase-index.json` at the repo root (or `<repo-path>/docs/codebase-index.json`).
+Check for `.atlas/codebase-index.json` at the repo root (or `<repo-path>/.atlas/codebase-index.json`).
 
 **If index exists:** derive most of the profile directly:
 - `EXPOSES` endpoints ← components with `type: "api"` and `layer: 1`; routes from handler files listed in `section_file_map["Component Map"]`
@@ -73,7 +73,7 @@ Check for `docs/codebase-index.json` at the repo root (or `<repo-path>/docs/code
 
 Only read source files when the index data is insufficient to determine a specific field. This path should take at most 2–3 targeted file reads.
 
-**If `docs/codebase-overview.md` exists (but no index):** read it. It likely contains Component Map, Data Layer, and Architecture Patterns sections that answer most questions without code exploration.
+**If `.atlas/codebase-overview.md` exists (but no index):** read it. It likely contains Component Map, Data Layer, and Architecture Patterns sections that answer most questions without code exploration.
 
 **If neither exists:** proceed to deep exploration below.
 

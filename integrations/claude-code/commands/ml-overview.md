@@ -1,12 +1,12 @@
 ---
 name: ml-overview
-description: Deeply explore ML components and generate docs/ml-overview.md covering models, training pipelines, data sources, feature engineering, evaluation, serving, and monitoring. Use when a repo contains ML code — torch, tensorflow, sklearn, training scripts, notebooks, mlflow, wandb, or similar.
+description: Deeply explore ML components and generate .atlas/ml-overview.md covering models, training pipelines, data sources, feature engineering, evaluation, serving, and monitoring. Use when a repo contains ML code — torch, tensorflow, sklearn, training scripts, notebooks, mlflow, wandb, or similar.
 allowed-tools: Read Glob Grep Bash Write Edit
 ---
 
 # Command: ML Overview
 
-Orchestrates exploration of the machine learning components in the current repository and produces (or refreshes) `docs/ml-overview.md`.
+Orchestrates exploration of the machine learning components in the current repository and produces (or refreshes) `.atlas/ml-overview.md`.
 
 Works in:
 - **Pure ML repos** (research, training pipelines, notebooks)
@@ -25,24 +25,24 @@ USAGE
   /ml-overview [options]
 
 DESCRIPTION
-  Scans the current repo for ML artefacts and writes docs/ml-overview.md
+  Scans the current repo for ML artefacts and writes .atlas/ml-overview.md
   covering: model inventory, data sources, feature engineering, training
   pipelines, experiment tracking, evaluation, serving/inference, retraining
   triggers, monitoring, and environment/reproducibility.
 
-  If docs/codebase-index.json exists, it is used to fast-path ML artifact
+  If .atlas/codebase-index.json exists, it is used to fast-path ML artifact
   detection before any file exploration.
 
   If the file already exists, merges new findings rather than overwriting.
 
 OPTIONS
-  --output <path>    Override output path (default: docs/ml-overview.md)
+  --output <path>    Override output path (default: .atlas/ml-overview.md)
   --focus <area>     Give extra depth to one area, e.g. --focus "training pipeline"
   --fresh            Skip merge — write a completely new file from scratch
   --help, -h         Show this help and exit
 
 OUTPUT FILES
-  docs/ml-overview.md
+  .atlas/ml-overview.md
 
 RELATED SKILLS
   /codebase-overview      — General service architecture (complement for hybrid repos)
@@ -55,8 +55,8 @@ RELATED SKILLS
 ## Step 1 — Detect existing ML overview and index
 
 Check for:
-- `docs/ml-overview.md` (or `--output` path) — existing overview to merge into
-- `docs/codebase-index.json` — structured index that may fast-path ML artifact detection
+- `.atlas/ml-overview.md` (or `--output` path) — existing overview to merge into
+- `.atlas/codebase-index.json` — structured index that may fast-path ML artifact detection
 
 **If index exists:** read it. Use `architecture.frameworks` and `files[].component_type` to immediately identify files likely containing ML code. Look for component types `lambda`, `worker`, `service` with symbols matching ML library names. This avoids a full directory scan for ML artifacts.
 
@@ -68,14 +68,14 @@ Check for:
 
 **If `--code-only` equivalent is not desired:** read the following if present:
 - `CLAUDE.md` / `README.md`
-- `docs/codebase-overview.md` (to avoid duplication with general architecture)
-- Any other files in `docs/`
+- `.atlas/codebase-overview.md` (to avoid duplication with general architecture)
+- Any other files in `.atlas/`
 
 ---
 
 ## Step 3 — Detect ML artefacts
 
-**Fast path:** if `docs/codebase-index.json` exists, check `architecture.frameworks` for ML libraries and `files[]` for ML-related symbols. Use this to build the initial artifact list, then verify with targeted file reads.
+**Fast path:** if `.atlas/codebase-index.json` exists, check `architecture.frameworks` for ML libraries and `files[]` for ML-related symbols. Use this to build the initial artifact list, then verify with targeted file reads.
 
 **Full scan** (if no index): scan the repo for signals of ML code:
 
@@ -154,7 +154,7 @@ Output file must begin with:
 <!-- Last updated: YYYY-MM-DD -->
 ```
 
-Then a cross-reference block linking to companion docs (`docs/codebase-index.json` if it exists, `docs/codebase-overview.md` if it exists), followed by the full content.
+Then a cross-reference block linking to companion docs (`.atlas/codebase-index.json` if it exists, `.atlas/codebase-overview.md` if it exists), followed by the full content.
 
 ---
 
@@ -208,7 +208,7 @@ Table of most important files with single-line purpose.
 
 ## Parameters
 
-- `--output <path>`: Override output path (default: `docs/ml-overview.md`)
+- `--output <path>`: Override output path (default: `.atlas/ml-overview.md`)
 - `--focus <area>`: Extra depth on a specific area (e.g. `"training pipeline"`, `"serving"`, `"data"`)
 - `--fresh`: Skip merge — write completely new file
 
@@ -217,9 +217,9 @@ Table of most important files with single-line purpose.
 ## Notes
 
 - **Train/serving skew is the single most common source of silent ML bugs.** Always investigate whether features are computed identically at training and serving time.
-- **The index fast-path saves time.** If `docs/codebase-index.json` exists, use it to identify ML files before scanning. It prevents redundant glob/grep across the whole codebase.
+- **The index fast-path saves time.** If `.atlas/codebase-index.json` exists, use it to identify ML files before scanning. It prevents redundant glob/grep across the whole codebase.
 - For notebooks (`*.ipynb`): read markdown cells and cell outputs, not just code. They often have the best explanation of intent.
 - If no experiment tracking is found, note this explicitly — it is a significant operational risk.
-- If the repo also has non-ML service code: note at the top "For general service architecture, see `docs/codebase-overview.md`. Run `/codebase-overview` to generate it."
-- If `docs/` does not exist, create it.
+- If the repo also has non-ML service code: note at the top "For general service architecture, see `.atlas/codebase-overview.md`. Run `/codebase-overview` to generate it."
+- If `.atlas/` does not exist, create it.
 - The `<!-- Last updated: YYYY-MM-DD -->` line must always be the first line of the output file.

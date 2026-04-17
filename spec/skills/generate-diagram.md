@@ -14,9 +14,9 @@ Produce architecture diagram files from the available codebase knowledge. Always
 
 Read inputs in this order, stopping at the first that exists:
 
-1. **`docs/codebase-index.json`** — best source; `components[]`, `flows[]`, `architecture` field already extracted
-2. **`docs/codebase-overview.md`** — components, integrations, data flows in prose form
-3. **`docs/ml-overview.md`** — supplement if present (adds ML pipeline components)
+1. **`.atlas/codebase-index.json`** — best source; `components[]`, `flows[]`, `architecture` field already extracted
+2. **`.atlas/codebase-overview.md`** — components, integrations, data flows in prose form
+3. **`.atlas/ml-overview.md`** — supplement if present (adds ML pipeline components)
 4. **Direct exploration** — entry points, external clients, DB config, infra files
 
 ---
@@ -55,7 +55,7 @@ Horizontal spacing: 180px wide, 60px tall per service node. 40px gap. Start x at
 
 ## Step 3 — Generate draw.io XML
 
-Output to `docs/architecture.drawio`.
+Output to `.atlas/architecture.drawio`.
 
 **Node styles by type:**
 
@@ -72,7 +72,7 @@ Output to `docs/architecture.drawio`.
 
 ## Step 4 — Generate Excalidraw JSON (only if `--format excalidraw` or `--format both`)
 
-Output to `docs/architecture.excalidraw`. Use Excalidraw v2 format.
+Output to `.atlas/architecture.excalidraw`. Use Excalidraw v2 format.
 
 **Fill colours by type:**
 
@@ -89,7 +89,7 @@ Output to `docs/architecture.excalidraw`. Use Excalidraw v2 format.
 
 ## Step 5 — Generate Mermaid Preview
 
-Always generate this regardless of format flags. Embed in `docs/architecture-diagram.md`.
+Always generate this regardless of format flags. Embed in `.atlas/architecture-diagram.md`.
 
 - Use `graph LR` for systems with multiple component layers.
 - Use `graph TD` only for simple linear pipelines with ≤5 rows.

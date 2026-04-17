@@ -1,12 +1,12 @@
 ---
 name: codebase-overview
-description: Deeply explore a service codebase and generate docs/codebase-index.json and docs/codebase-overview.md. Use when onboarding to a new repo, keeping architecture docs current, preparing for a refactor, or generating docs before a production incident investigation.
+description: Deeply explore a service codebase and generate .atlas/codebase-index.json and .atlas/codebase-overview.md. Use when onboarding to a new repo, keeping architecture docs current, preparing for a refactor, or generating docs before a production incident investigation.
 allowed-tools: Read Glob Grep Bash Write Edit
 ---
 
 # Command: Codebase Overview
 
-Orchestrates a full or targeted exploration of the current service codebase, producing (or refreshing) `docs/codebase-overview.md` and `docs/codebase-index.json`.
+Orchestrates a full or targeted exploration of the current service codebase, producing (or refreshing) `.atlas/codebase-overview.md` and `.atlas/codebase-index.json`.
 
 ## Skills used
 
@@ -32,8 +32,8 @@ USAGE
 
 DESCRIPTION
   Explores the current repo and writes:
-    docs/codebase-index.json      Structured machine-readable codebase map
-    docs/codebase-overview.md     Human-readable architecture reference
+    .atlas/codebase-index.json      Structured machine-readable codebase map
+    .atlas/codebase-overview.md     Human-readable architecture reference
 
   On refresh: uses git to detect what changed since the last update. If changes
   are small (≤20 files, ≤5 packages), only the affected doc sections are
@@ -43,24 +43,24 @@ DESCRIPTION
   are too broad.
 
 OPTIONS
-  --output <path>             Override output path (default: docs/codebase-overview.md)
+  --output <path>             Override output path (default: .atlas/codebase-overview.md)
   --focus <area>              Give extra depth to one area, e.g. --focus "async pipeline"
   --fresh                     Skip git optimisation — full re-index from scratch
-  --code-only                 Derive everything from codebase; skip reading existing docs/
-  --with-diagram              Also generate docs/architecture.drawio + Mermaid preview
-  --with-diagram=excalidraw   Also generate docs/architecture.excalidraw + Mermaid preview
+  --code-only                 Derive everything from codebase; skip reading existing .atlas/
+  --with-diagram              Also generate .atlas/architecture.drawio + Mermaid preview
+  --with-diagram=excalidraw   Also generate .atlas/architecture.excalidraw + Mermaid preview
   --with-diagram=both         Generate draw.io + Excalidraw + Mermaid preview
   --with-ml               Also run /ml-overview (forced, even if no ML detected)
   --no-ml                 Skip ml-overview even if ML artifacts are detected
   --help, -h                  Show this help and exit
 
 OUTPUT FILES (default)
-  docs/codebase-index.json        Always written / updated
-  docs/codebase-overview.md       Always written / updated
-  docs/architecture.drawio        (only with --with-diagram)
-  docs/architecture-diagram.md    (only with --with-diagram)
-  docs/architecture.excalidraw    (only with --with-diagram=excalidraw or =both)
-  docs/ml-overview.md     (when ML detected or --with-ml, unless --no-ml)
+  .atlas/codebase-index.json        Always written / updated
+  .atlas/codebase-overview.md       Always written / updated
+  .atlas/architecture.drawio        (only with --with-diagram)
+  .atlas/architecture-diagram.md    (only with --with-diagram)
+  .atlas/architecture.excalidraw    (only with --with-diagram=excalidraw or =both)
+  .atlas/ml-overview.md     (when ML detected or --with-ml, unless --no-ml)
 
 RELATED SKILLS
   /ml-overview            — ML-specific deep dive (models, training, data, serving)
@@ -73,8 +73,8 @@ RELATED SKILLS
 ## Step 1 — Detect existing files
 
 Check for:
-- `docs/codebase-index.json` — the structured index
-- `docs/codebase-overview.md` (or `--output` path) — the human-readable doc
+- `.atlas/codebase-index.json` — the structured index
+- `.atlas/codebase-overview.md` (or `--output` path) — the human-readable doc
 
 Record which exist. This determines the starting mode.
 
@@ -110,7 +110,7 @@ Follow the instructions in `skills/index-codebase.md`.
 - Run Mode B (targeted update) from the index-codebase skill
 - Pass `--files <changed_files>` (the list from detect-git-changes)
 
-**`--code-only` flag:** if passed, do not read any existing files in `docs/` (other than `codebase-index.json` itself) during indexing. Derive everything from codebase exploration only.
+**`--code-only` flag:** if passed, do not read any existing files in `.atlas/` (other than `codebase-index.json` itself) during indexing. Derive everything from codebase exploration only.
 
 ---
 
@@ -140,9 +140,9 @@ Map flags:
 - `--with-diagram=excalidraw` → `--format excalidraw`
 - `--with-diagram=both` → `--format both`
 
-The skill reads `docs/codebase-index.json` as its input — no second codebase exploration needed.
+The skill reads `.atlas/codebase-index.json` as its input — no second codebase exploration needed.
 
-After the diagram is written, add a cross-reference to `docs/architecture-diagram.md` in the companion docs block at the top of `docs/codebase-overview.md`.
+After the diagram is written, add a cross-reference to `.atlas/architecture-diagram.md` in the companion docs block at the top of `.atlas/codebase-overview.md`.
 
 ---
 
@@ -164,9 +164,9 @@ Scan the repo for ML signals:
 | No ML artifacts and no `--with-ml` | Skip. |
 
 When ml-overview runs:
-- It will read `docs/codebase-index.json` (just written in Step 3) to fast-path artifact detection — no redundant scan.
-- After it completes, add a cross-reference line near the top of `docs/codebase-overview.md`:
-  `> **ML overview:** see [docs/ml-overview.md](docs/ml-overview.md)`
+- It will read `.atlas/codebase-index.json` (just written in Step 3) to fast-path artifact detection — no redundant scan.
+- After it completes, add a cross-reference line near the top of `.atlas/codebase-overview.md`:
+  `> **ML overview:** see [.atlas/ml-overview.md](.atlas/ml-overview.md)`
 
 ---
 
@@ -195,7 +195,7 @@ When ml-overview runs:
 ## Notes
 
 - **Always log the mode used** (targeted / full / date-only) so the user knows what happened.
-- **`docs/codebase-index.json` is always written**, even on a targeted refresh. It is the long-term persistent state for this command.
+- **`.atlas/codebase-index.json` is always written**, even on a targeted refresh. It is the long-term persistent state for this command.
 - **Git acceleration is the default for refreshes.** Targeted mode reads only changed files — it should feel fast. Full fallback is automatic when needed.
-- If `docs/` does not exist, create it.
+- If `.atlas/` does not exist, create it.
 - The `<!-- Last updated: YYYY-MM-DD -->` line must always be the first line of the overview doc.

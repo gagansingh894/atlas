@@ -1,6 +1,6 @@
 # Command: ML Overview
 
-Orchestrates exploration of the machine learning components in the current repository and produces (or refreshes) `docs/ml-overview.md`.
+Orchestrates exploration of the machine learning components in the current repository and produces (or refreshes) `.atlas/ml-overview.md`.
 
 Works in:
 - **Pure ML repos** (research, training pipelines, notebooks)
@@ -19,24 +19,24 @@ USAGE
   ml-overview [options]
 
 DESCRIPTION
-  Scans the current repo for ML artefacts and writes docs/ml-overview.md
+  Scans the current repo for ML artefacts and writes .atlas/ml-overview.md
   covering: model inventory, data sources, feature engineering, training
   pipelines, experiment tracking, evaluation, serving/inference, retraining
   triggers, monitoring, and environment/reproducibility.
 
-  If docs/codebase-index.json exists, it is used to fast-path ML artifact
+  If .atlas/codebase-index.json exists, it is used to fast-path ML artifact
   detection before any file exploration.
 
   If the file already exists, merges new findings rather than overwriting.
 
 OPTIONS
-  --output <path>    Override output path (default: docs/ml-overview.md)
+  --output <path>    Override output path (default: .atlas/ml-overview.md)
   --focus <area>     Give extra depth to one area, e.g. --focus "training pipeline"
   --fresh            Skip merge — write a completely new file from scratch
   --help, -h         Show this help and exit
 
 OUTPUT FILES
-  docs/ml-overview.md
+  .atlas/ml-overview.md
 
 RELATED SKILLS
   codebase-overview      — General service architecture (complement for hybrid repos)
@@ -49,8 +49,8 @@ RELATED SKILLS
 ## Step 1 — Detect existing ML overview and index
 
 Check for:
-- `docs/ml-overview.md` (or `--output` path) — existing overview to merge into
-- `docs/codebase-index.json` — structured index that may fast-path ML artifact detection
+- `.atlas/ml-overview.md` (or `--output` path) — existing overview to merge into
+- `.atlas/codebase-index.json` — structured index that may fast-path ML artifact detection
 
 **If index exists:** read it. Use `architecture.frameworks` and `files[].component_type` to immediately identify files likely containing ML code. This avoids a full directory scan for ML artifacts.
 
@@ -62,14 +62,14 @@ Check for:
 
 Read the following if present:
 - `CLAUDE.md` / `README.md`
-- `docs/codebase-overview.md` (to avoid duplication with general architecture)
-- Any other files in `docs/`
+- `.atlas/codebase-overview.md` (to avoid duplication with general architecture)
+- Any other files in `.atlas/`
 
 ---
 
 ## Step 3 — Detect ML artefacts
 
-**Fast path:** if `docs/codebase-index.json` exists, check `architecture.frameworks` for ML libraries and `files[]` for ML-related symbols.
+**Fast path:** if `.atlas/codebase-index.json` exists, check `architecture.frameworks` for ML libraries and `files[]` for ML-related symbols.
 
 **Full scan** (if no index): scan the repo for signals of ML code:
 
@@ -202,7 +202,7 @@ Table of most important files with single-line purpose.
 
 ## Parameters
 
-- `--output <path>`: Override output path (default: `docs/ml-overview.md`)
+- `--output <path>`: Override output path (default: `.atlas/ml-overview.md`)
 - `--focus <area>`: Extra depth on a specific area
 - `--fresh`: Skip merge — write completely new file
 
@@ -211,8 +211,8 @@ Table of most important files with single-line purpose.
 ## Notes
 
 - **Train/serving skew is the single most common source of silent ML bugs.** Always investigate whether features are computed identically at training and serving time.
-- **The index fast-path saves time.** If `docs/codebase-index.json` exists, use it to identify ML files before scanning.
+- **The index fast-path saves time.** If `.atlas/codebase-index.json` exists, use it to identify ML files before scanning.
 - For notebooks (`*.ipynb`): read markdown cells and cell outputs, not just code.
 - If no experiment tracking is found, note this explicitly — it is a significant operational risk.
-- If `docs/` does not exist, create it.
+- If `.atlas/` does not exist, create it.
 - The `<!-- Last updated: YYYY-MM-DD -->` line must always be the first line of the output file.

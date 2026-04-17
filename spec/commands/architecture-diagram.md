@@ -26,11 +26,11 @@ DESCRIPTION
   architecture diagram files.
 
   Always produces:
-    docs/architecture.drawio       (open in diagrams.net or VS Code draw.io extension)
-    docs/architecture-diagram.md   (Mermaid preview — renders in GitHub instantly)
+    .atlas/architecture.drawio       (open in diagrams.net or VS Code draw.io extension)
+    .atlas/architecture-diagram.md   (Mermaid preview — renders in GitHub instantly)
 
   Optionally produces:
-    docs/architecture.excalidraw   (with --format excalidraw or --format both)
+    .atlas/architecture.excalidraw   (with --format excalidraw or --format both)
 
 OPTIONS
   --format drawio        Generate draw.io only (default)
@@ -42,7 +42,7 @@ OPTIONS
                            sequence  — Mermaid sequence diagram for one flow
                            infra     — cloud infrastructure resources
   --flow <name>          Used with --type sequence: name of the E2E flow to trace
-  --output <dir>         Override output directory (default: docs/)
+  --output <dir>         Override output directory (default: .atlas/)
   --fresh                Ignore existing diagram files and regenerate from scratch
   --help, -h             Show this help and exit
 
@@ -72,16 +72,16 @@ Check for knowledge sources in priority order:
 
 | Priority | Source | Action |
 |----------|--------|--------|
-| 1 | `docs/codebase-index.json` | Best source — structured component inventory already extracted |
-| 2 | `docs/codebase-overview.md` | Good source — components, integrations, data flows in prose |
-| 3 | `docs/ml-overview.md` | Supplement if present — adds ML pipeline components |
+| 1 | `.atlas/codebase-index.json` | Best source — structured component inventory already extracted |
+| 2 | `.atlas/codebase-overview.md` | Good source — components, integrations, data flows in prose |
+| 3 | `.atlas/ml-overview.md` | Supplement if present — adds ML pipeline components |
 | 4 | None of the above | Explore the codebase directly (entry points, clients, DB config, infra files) |
 
-Log which source is being used (e.g. `"Using docs/codebase-index.json as input"`).
+Log which source is being used (e.g. `"Using .atlas/codebase-index.json as input"`).
 
 If sources 1 and 2 do not exist, print a suggestion:
 ```
-No docs/codebase-index.json or docs/codebase-overview.md found.
+No .atlas/codebase-index.json or .atlas/codebase-overview.md found.
 Run codebase-overview first for a richer, faster diagram.
 Proceeding with direct codebase exploration...
 ```
@@ -96,7 +96,7 @@ Pass through all user flags:
 - `--format <value>` (default: `drawio`)
 - `--type <value>` (default: `system`)
 - `--flow <name>` (for `--type sequence`)
-- `--output <dir>` (default: `docs/`)
+- `--output <dir>` (default: `.atlas/`)
 - `--fresh`
 
 The skill handles all diagram generation: component inventory extraction, layout grid, draw.io XML, Excalidraw JSON, and Mermaid preview.
@@ -106,13 +106,13 @@ The skill handles all diagram generation: component inventory extraction, layout
 ## Examples
 
 ### Quick system overview (draw.io only)
-`architecture-diagram` → reads best available source → generates `docs/architecture.drawio` + `docs/architecture-diagram.md`.
+`architecture-diagram` → reads best available source → generates `.atlas/architecture.drawio` + `.atlas/architecture-diagram.md`.
 
 ### Both formats
 `architecture-diagram --format both` → generates draw.io + Excalidraw + Mermaid.
 
 ### Sequence diagram for a specific flow
-`architecture-diagram --type sequence --flow "delivery creation"` → Mermaid `sequenceDiagram` in `docs/architecture-diagram.md`.
+`architecture-diagram --type sequence --flow "delivery creation"` → Mermaid `sequenceDiagram` in `.atlas/architecture-diagram.md`.
 
 ### Data-flow focused
 `architecture-diagram --type data-flow` → emphasises data stores, transformation steps, and queues.
@@ -124,6 +124,6 @@ The skill handles all diagram generation: component inventory extraction, layout
 
 ## Notes
 
-- **Prefer `docs/codebase-index.json` over `docs/codebase-overview.md`.** The index has structured component data already extracted; the overview requires prose parsing.
+- **Prefer `.atlas/codebase-index.json` over `.atlas/codebase-overview.md`.** The index has structured component data already extracted; the overview requires prose parsing.
 - **`codebase-overview` is the recommended first step.** Running it first builds both the index and the overview doc, making this command significantly faster and more accurate.
-- Mermaid is always the fastest win — if the user just needs a quick visual, the Mermaid in `docs/architecture-diagram.md` renders immediately in GitHub.
+- Mermaid is always the fastest win — if the user just needs a quick visual, the Mermaid in `.atlas/architecture-diagram.md` renders immediately in GitHub.

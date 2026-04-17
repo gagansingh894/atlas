@@ -1,6 +1,6 @@
 # Skill: Write Overview Doc
 
-Read `docs/codebase-index.json` and produce `docs/codebase-overview.md` — the comprehensive human-readable architecture reference.
+Read `.atlas/codebase-index.json` and produce `.atlas/codebase-overview.md` — the comprehensive human-readable architecture reference.
 
 ## When to use this skill
 
@@ -11,10 +11,10 @@ Read `docs/codebase-index.json` and produce `docs/codebase-overview.md` — the 
 
 ## Prerequisites
 
-`docs/codebase-index.json` must exist. If it does not, stop and report:
+`.atlas/codebase-index.json` must exist. If it does not, stop and report:
 
 ```
-docs/codebase-index.json not found.
+.atlas/codebase-index.json not found.
 Run the index-codebase skill first (or run codebase-overview to do both in one step).
 ```
 
@@ -24,14 +24,14 @@ Run the index-codebase skill first (or run codebase-overview to do both in one s
 
 ### Step 1 — Load the index
 
-Read `docs/codebase-index.json`. This determines:
+Read `.atlas/codebase-index.json`. This determines:
 - Which files feed which sections (`section_file_map`)
 - The component inventory, entities, ID types, and flows already extracted
 - The language/framework profile
 
 ### Step 2 — Load existing overview (for merge)
 
-If `docs/codebase-overview.md` already exists AND `--fresh` was NOT passed:
+If `.atlas/codebase-overview.md` already exists AND `--fresh` was NOT passed:
 - Read it in full
 - Parse the `<!-- Last updated: YYYY-MM-DD -->` date from line 1
 - In targeted mode: sections **not** in `--sections` will be kept verbatim

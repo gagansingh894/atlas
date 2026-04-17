@@ -24,13 +24,13 @@ USAGE
 
 DESCRIPTION
   Analyses a set of repos (local paths and/or GitHub URLs) and produces:
-    docs/ecosystem-overview.md   Dependency graph, flows, impact analysis
-    docs/ecosystem.drawio        Editable diagram (swim lanes per repo)
-    docs/ecosystem-diagram.md    Mermaid preview
+    .atlas/ecosystem-overview.md   Dependency graph, flows, impact analysis
+    .atlas/ecosystem.drawio        Editable diagram (swim lanes per repo)
+    .atlas/ecosystem-diagram.md    Mermaid preview
 
   For each repo, the explore-repo-interface skill is used to extract what
   the repo exposes, what it depends on, and what data it owns.
-  If a repo already has docs/codebase-index.json, that fast-path is used
+  If a repo already has .atlas/codebase-index.json, that fast-path is used
   automatically — no re-exploration needed.
 
 INPUT FILE FORMAT (--repos-file)
@@ -41,18 +41,18 @@ INPUT FILE FORMAT (--repos-file)
 
 OPTIONS
   --repos-file <path>    Path to repos .txt file
-  --output <dir>         Override output directory (default: docs/)
+  --output <dir>         Override output directory (default: .atlas/)
   --fresh                Ignore existing output files and regenerate from scratch
   --no-diagram           Skip diagram files — overview doc only
-  --with-excalidraw      Also generate docs/ecosystem.excalidraw
+  --with-excalidraw      Also generate .atlas/ecosystem.excalidraw
   --focus <area>         Extra depth on: impact | data | flows | contracts
   --help, -h             Show this help and exit
 
 OUTPUT FILES
-  docs/ecosystem-overview.md
-  docs/ecosystem.drawio          (unless --no-diagram)
-  docs/ecosystem-diagram.md      (unless --no-diagram)
-  docs/ecosystem.excalidraw      (only with --with-excalidraw)
+  .atlas/ecosystem-overview.md
+  .atlas/ecosystem.drawio          (unless --no-diagram)
+  .atlas/ecosystem-diagram.md      (unless --no-diagram)
+  .atlas/ecosystem.excalidraw      (only with --with-excalidraw)
 
 REQUIRES (for GitHub URLs)
   gh CLI installed and authenticated: gh auth login
@@ -105,8 +105,8 @@ Follow the instructions in `spec/skills/explore-repo-interface.md` for each acce
 Run in parallel where possible (multiple repos can be explored concurrently as they are independent).
 
 The skill:
-- Fast-paths via `docs/codebase-index.json` if it exists in the repo
-- Falls back to `docs/codebase-overview.md` if available
+- Fast-paths via `.atlas/codebase-index.json` if it exists in the repo
+- Falls back to `.atlas/codebase-overview.md` if available
 - Falls back to direct exploration if neither exists
 
 Collect a structured interface profile for each repo.
@@ -165,7 +165,7 @@ Trace the most significant user/system journeys that cross ≥2 repos. For each 
 
 ---
 
-## Step 7 — Write `docs/ecosystem-overview.md`
+## Step 7 — Write `.atlas/ecosystem-overview.md`
 
 Structure:
 
@@ -210,11 +210,11 @@ For ecosystem diagrams, use these conventions:
 - REST edges: solid arrow; Kafka/event edges: dashed arrow; SQS edges: dotted arrow
 - EXTERNAL nodes: grey fill, dashed border
 
-For the Mermaid preview, produce **two diagrams** in `docs/ecosystem-diagram.md`:
+For the Mermaid preview, produce **two diagrams** in `.atlas/ecosystem-diagram.md`:
 1. **Full Component Diagram** (`graph LR`) — every component as its own node
 2. **Critical Path Summary** (`graph LR`) — one node per repo, P0/P1 edges highlighted in red
 
-If `--with-excalidraw` was passed: also generate `docs/ecosystem.excalidraw`.
+If `--with-excalidraw` was passed: also generate `.atlas/ecosystem.excalidraw`.
 
 ---
 
@@ -230,9 +230,9 @@ rm -rf /tmp/ecosystem-overview/
 ## Notes
 
 - **Partial success is always better than total failure.** If 3 of 4 repos load, analyse the 3 and document the failure.
-- **Prefer existing docs over re-exploration.** If a repo has `docs/codebase-index.json`, the explore-repo-interface skill will use it automatically.
+- **Prefer existing docs over re-exploration.** If a repo has `.atlas/codebase-index.json`, the explore-repo-interface skill will use it automatically.
 - **SYNC vs ASYNC is the most important field to get right.**
 - **Never abbreviate components in diagrams.**
 - **Don't invent connections.** Only record dependencies explicitly visible in code, config, or docs.
 - The `<!-- Last updated: YYYY-MM-DD -->` line must be the first line of every output file.
-- If `docs/` does not exist, create it.
+- If `.atlas/` does not exist, create it.

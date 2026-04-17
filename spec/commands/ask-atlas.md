@@ -15,7 +15,7 @@ USAGE
   ask-atlas [question] [options]
 
 DESCRIPTION
-  Loads docs/codebase-overview.md (and ml-overview.md, architecture-diagram.md
+  Loads .atlas/codebase-overview.md (and ml-overview.md, architecture-diagram.md
   if present) into context, then answers questions from those docs only —
   no codebase re-traversal, minimal token usage.
 
@@ -49,7 +49,7 @@ Extract from the invocation:
 - **Inline question**: everything that is not a flag or flag argument
 - **`--files <path1,path2,...>`**: comma-separated paths relative to the repo root; read each in full during Step 5
 - **`--fresh`**: if present, regenerate all docs before entering chat mode
-- **`--no-ml`**: if present, skip `docs/ml-overview.md` even if it exists
+- **`--no-ml`**: if present, skip `.atlas/ml-overview.md` even if it exists
 - **`--help` / `-h`**: handled in Step 0
 
 ---
@@ -58,10 +58,10 @@ Extract from the invocation:
 
 Look for the following files (do NOT search the source tree — only check these exact paths):
 
-1. `docs/codebase-overview.md` ← primary (required)
-2. `docs/codebase-index.json` ← used for staleness check
-3. `docs/ml-overview.md` ← auto-included if present, unless `--no-ml`
-4. `docs/architecture-diagram.md` ← auto-included if present
+1. `.atlas/codebase-overview.md` ← primary (required)
+2. `.atlas/codebase-index.json` ← used for staleness check
+3. `.atlas/ml-overview.md` ← auto-included if present, unless `--no-ml`
+4. `.atlas/architecture-diagram.md` ← auto-included if present
 
 Record which exist.
 
@@ -69,18 +69,18 @@ Record which exist.
 
 ## Step 3 — Auto-generate if missing (or `--fresh`)
 
-**If `docs/codebase-overview.md` does not exist OR `--fresh` was passed:**
+**If `.atlas/codebase-overview.md` does not exist OR `--fresh` was passed:**
 
 Print:
 ```
-No docs/codebase-overview.md found.
+No .atlas/codebase-overview.md found.
 Generating docs now — this takes 2–4 minutes on a large repo.
 Running codebase-overview...
 ```
 
 Follow all steps in `spec/commands/codebase-overview.md`. After generation completes, continue to Step 4.
 
-**If `docs/codebase-overview.md` exists and `--fresh` was not passed:** skip this step.
+**If `.atlas/codebase-overview.md` exists and `--fresh` was not passed:** skip this step.
 
 ---
 
@@ -114,9 +114,9 @@ Run the `detect-git-changes` skill. Use the result to decide what to print:
 
 Read all available docs. Do NOT search source files — only read the specific paths listed here plus any `--files` paths:
 
-1. `docs/codebase-overview.md` (required — always read)
-2. `docs/ml-overview.md` (read if it exists and `--no-ml` was not passed)
-3. `docs/architecture-diagram.md` (read if it exists)
+1. `.atlas/codebase-overview.md` (required — always read)
+2. `.atlas/ml-overview.md` (read if it exists and `--no-ml` was not passed)
+3. `.atlas/architecture-diagram.md` (read if it exists)
 4. Each file from `--files` (read each in full)
 
 ---
@@ -181,6 +181,6 @@ These constraints apply for the entire conversation after entering chat mode:
 
 - **Do not scan source files.** The entire value of this command is answering from pre-built docs.
 - **`--files` is the escape hatch.** When a question genuinely requires source-level detail, tell the user to re-invoke with `--files` pointing to the relevant file.
-- **The staleness check uses the `detect-git-changes` skill** — reads the last-updated date from `docs/codebase-index.json` or `docs/codebase-overview.md`.
-- **If `docs/` does not exist**, the docs are missing — go directly to Step 3 auto-generation.
-- **`--no-ml` only suppresses loading `docs/ml-overview.md`** — it does not affect what was in `docs/codebase-overview.md`.
+- **The staleness check uses the `detect-git-changes` skill** — reads the last-updated date from `.atlas/codebase-index.json` or `.atlas/codebase-overview.md`.
+- **If `.atlas/` does not exist**, the docs are missing — go directly to Step 3 auto-generation.
+- **`--no-ml` only suppresses loading `.atlas/ml-overview.md`** — it does not affect what was in `.atlas/codebase-overview.md`.

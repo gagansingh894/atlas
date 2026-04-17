@@ -20,9 +20,9 @@ Produce architecture diagram files from the available codebase knowledge. Always
 
 Read inputs in this order, stopping at the first that exists:
 
-1. **`docs/codebase-index.json`** — best source; `components[]`, `flows[]`, `architecture` field already extracted
-2. **`docs/codebase-overview.md`** — already has components, integrations, data flows in prose form
-3. **`docs/ml-overview.md`** — supplement if present (adds ML pipeline components)
+1. **`.atlas/codebase-index.json`** — best source; `components[]`, `flows[]`, `architecture` field already extracted
+2. **`.atlas/codebase-overview.md`** — already has components, integrations, data flows in prose form
+3. **`.atlas/ml-overview.md`** — supplement if present (adds ML pipeline components)
 4. **Direct exploration** — entry points, external clients, DB config, infra files
 
 ---
@@ -81,7 +81,7 @@ Assign each node a short slug ID (e.g. `partner-api`, `dynamo-deliveries`) and r
 
 ## Step 3 — Generate draw.io XML
 
-Output to `docs/architecture.drawio` (or `--output` dir).
+Output to `.atlas/architecture.drawio` (or `--output` dir).
 
 Use this root template:
 
@@ -132,7 +132,7 @@ Use this root template:
 
 ## Step 4 — Generate Excalidraw JSON (only if `--format excalidraw` or `--format both`)
 
-Output to `docs/architecture.excalidraw`. Use the same grid positions from Step 2.
+Output to `.atlas/architecture.excalidraw`. Use the same grid positions from Step 2.
 
 Root structure (Excalidraw v2):
 ```json
@@ -204,7 +204,7 @@ Root structure (Excalidraw v2):
 
 ## Step 5 — Generate Mermaid Preview
 
-Always generate this regardless of format flags. Embed in `docs/architecture-diagram.md`.
+Always generate this regardless of format flags. Embed in `.atlas/architecture-diagram.md`.
 
 **Layout choice:**
 - Use `graph LR` (left-to-right) for systems with multiple component layers — it spreads horizontally.
@@ -231,14 +231,14 @@ classDef queue fill:#fff2cc,stroke:#d6b656
 classDef external fill:#f5f5f5,stroke:#666666
 ```
 
-The `docs/architecture-diagram.md` file format:
+The `.atlas/architecture-diagram.md` file format:
 
 ```markdown
 <!-- Last updated: YYYY-MM-DD -->
 
 # Architecture Diagram
 
-> Auto-generated. Open `docs/architecture.drawio` in [diagrams.net](https://app.diagrams.net).
+> Auto-generated. Open `.atlas/architecture.drawio` in [diagrams.net](https://app.diagrams.net).
 > **draw.io tip:** Press `Ctrl+Shift+H` (Fit Page) then `Arrange > Layout` to auto-arrange nodes.
 > Run `/codebase-overview` to regenerate the source docs this diagram is built from.
 
@@ -272,7 +272,7 @@ If `--fresh` was passed: overwrite without merging.
 - `--type sequence`: Mermaid `sequenceDiagram` for one specific flow (use with `--flow`)
 - `--type infra`: cloud infrastructure resources (Lambda, DynamoDB, SQS, VPC, etc.)
 - `--flow <name>`: name of the E2E flow to trace when `--type sequence`
-- `--output <dir>`: override output directory (default: `docs/`)
+- `--output <dir>`: override output directory (default: `.atlas/`)
 - `--fresh`: ignore existing diagram files and regenerate from scratch
 
 ---

@@ -1,6 +1,6 @@
 # Skill: Detect Git Changes
 
-Determine what changed in the repo since the last `docs/codebase-overview.md` update and produce a structured result that tells the caller exactly what to re-index and which doc sections to regenerate.
+Determine what changed in the repo since the last `.atlas/codebase-overview.md` update and produce a structured result that tells the caller exactly what to re-index and which doc sections to regenerate.
 
 ## When to use this skill
 
@@ -32,9 +32,9 @@ reason:           human-readable explanation of why this mode was chosen
 
 ### Step 1 — Extract last-updated date
 
-**Prefer the index** (`docs/codebase-index.json`): read `meta.generated_at`.
+**Prefer the index** (`.atlas/codebase-index.json`): read `meta.generated_at`.
 
-**Fallback to the overview doc** (`docs/codebase-overview.md`): parse the `<!-- Last updated: YYYY-MM-DD -->` line from line 1.
+**Fallback to the overview doc** (`.atlas/codebase-overview.md`): parse the `<!-- Last updated: YYYY-MM-DD -->` line from line 1.
 
 If neither source yields a parseable date → output `mode: "full"` with `reason: "Could not determine last-updated date — falling back to full exploration"`. Stop here.
 
@@ -83,7 +83,7 @@ Count distinct **packages** changed (unique parent directories of changed files)
 
 **Only in targeted mode.**
 
-**Priority: use the index** (`docs/codebase-index.json`): for each file in `changed_files`, look it up in the index's `files[]` array and read its `feeds_sections`. Collect the union of all feeds_sections → `affected_sections`.
+**Priority: use the index** (`.atlas/codebase-index.json`): for each file in `changed_files`, look it up in the index's `files[]` array and read its `feeds_sections`. Collect the union of all feeds_sections → `affected_sections`.
 
 **Fallback: heuristic pattern table** (when no index exists):
 

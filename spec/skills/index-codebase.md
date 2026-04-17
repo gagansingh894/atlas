@@ -1,6 +1,6 @@
 # Skill: Index Codebase
 
-Build or update `docs/codebase-index.json` — a structured map of the codebase. This index is the shared source of truth used by the `write-overview-doc`, `detect-git-changes`, `generate-diagram`, and `explore-repo-interface` skills.
+Build or update `.atlas/codebase-index.json` — a structured map of the codebase. This index is the shared source of truth used by the `write-overview-doc`, `detect-git-changes`, `generate-diagram`, and `explore-repo-interface` skills.
 
 ## When to use this skill
 
@@ -12,7 +12,7 @@ Build or update `docs/codebase-index.json` — a structured map of the codebase.
 
 ## Index Schema
 
-`docs/codebase-index.json` structure:
+`.atlas/codebase-index.json` structure:
 
 ```json
 {
@@ -215,13 +215,13 @@ From imports/config/dependency manifests: languages, frameworks, databases, queu
 
 **10. Write the index**
 
-Write `docs/codebase-index.json`. Create `docs/` if it does not exist.
+Write `.atlas/codebase-index.json`. Create `.atlas/` if it does not exist.
 
 ---
 
 ### Mode B — Targeted update (`--files` list provided)
 
-1. Read the existing `docs/codebase-index.json`.
+1. Read the existing `.atlas/codebase-index.json`.
 2. For each file in the changed list:
    - **Deleted**: remove its entry from `files[]`, rebuild component deps.
    - **New**: classify and add to `files[]`, assign to a component.
@@ -236,7 +236,7 @@ Write `docs/codebase-index.json`. Create `docs/` if it does not exist.
 
 ## Parameters
 
-- `--output <path>`: Override output path (default: `docs/codebase-index.json`)
+- `--output <path>`: Override output path (default: `.atlas/codebase-index.json`)
 - `--fresh`: Re-index all files even if an index already exists
 - `--files <file1,file2,...>`: Only update these specific files (targeted Mode B)
 

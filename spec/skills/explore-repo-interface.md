@@ -53,9 +53,9 @@ TECH PROFILE:
 
 ### Step 1 — Fast path: check for existing index or overview
 
-**If `docs/codebase-index.json` exists:** derive the profile directly from it. Only read source files when the index data is insufficient. This should take at most 2–3 targeted file reads.
+**If `.atlas/codebase-index.json` exists:** derive the profile directly from it. Only read source files when the index data is insufficient. This should take at most 2–3 targeted file reads.
 
-**If `docs/codebase-overview.md` exists (but no index):** read it. It likely contains Component Map, Data Layer, and Architecture Patterns sections that answer most questions.
+**If `.atlas/codebase-overview.md` exists (but no index):** read it. It likely contains Component Map, Data Layer, and Architecture Patterns sections that answer most questions.
 
 **If neither exists:** proceed to deep exploration below.
 
