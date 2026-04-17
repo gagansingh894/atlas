@@ -4,7 +4,7 @@
 
 Atlas gives AI agents a persistent, structured understanding of your codebase. Instead of re-reading source files from scratch every time, the agent builds a machine-readable index once and refreshes only what changed. The result: faster, more accurate answers about architecture, flows, and impact — whether you just joined the team or have been shipping for years.
 
-Atlas ships with a **Claude Code integration** today. The core logic lives in agent-agnostic specs under `spec/` — see [`docs/agent-agnostic-guide.md`](docs/agent-agnostic-guide.md) to add support for Cursor, Copilot, Windsurf, or any other agent.
+Atlas ships with a **Claude Code integration** today. The core logic lives in agent-agnostic specs under `spec/` — see [`.atlas/agent-agnostic-guide.md`](.atlas/agent-agnostic-guide.md) to add support for Cursor, Copilot, Windsurf, or any other agent.
 
 ---
 
@@ -31,25 +31,25 @@ The `ask-atlas` command takes this further. Once docs exist, questions about the
 
 ## What it does
 
-Atlas is a two-layer system of **commands** and **skills**. The Claude Code integration ships today; other agents can be added by following the guide in [`docs/agent-agnostic-guide.md`](docs/agent-agnostic-guide.md).
+Atlas is a two-layer system of **commands** and **skills**. The Claude Code integration ships today; other agents can be added by following the guide in [`.atlas/agent-agnostic-guide.md`](.atlas/agent-agnostic-guide.md).
 
 **Commands** are predefined slash commands you invoke directly. Each command orchestrates a high-level workflow:
 
 | Command | What it produces |
 |---------|-----------------|
-| `/codebase-overview` | `docs/codebase-index.json` + `docs/codebase-overview.md` — full architecture reference with git-accelerated refresh |
+| `/codebase-overview` | `.atlas/codebase-index.json` + `.atlas/codebase-overview.md` — full architecture reference with git-accelerated refresh |
 | `/ask-atlas` | Instant Q&A from pre-built docs — no codebase re-traversal, minimal token usage |
-| `/architecture-diagram` | `docs/architecture.drawio` + `docs/architecture-diagram.md` — editable draw.io diagram and Mermaid preview |
-| `/ml-overview` | `docs/ml-overview.md` — models, training pipelines, data sources, experiment tracking, serving, monitoring |
-| `/ecosystem-overview` | `docs/ecosystem-overview.md` + diagrams — dependency graph and impact analysis across multiple repos |
+| `/architecture-diagram` | `.atlas/architecture.drawio` + `.atlas/architecture-diagram.md` — editable draw.io diagram and Mermaid preview |
+| `/ml-overview` | `.atlas/ml-overview.md` — models, training pipelines, data sources, experiment tracking, serving, monitoring |
+| `/ecosystem-overview` | `.atlas/ecosystem-overview.md` + diagrams — dependency graph and impact analysis across multiple repos |
 
 **Skills** are autonomous capabilities Claude activates on its own (no slash command needed). Commands delegate to skills; skills can also be used independently when Claude decides they're appropriate:
 
 | Skill | What it does |
 |-------|-------------|
-| `index-codebase` | Builds and maintains `docs/codebase-index.json` — the structured, machine-readable codebase map |
+| `index-codebase` | Builds and maintains `.atlas/codebase-index.json` — the structured, machine-readable codebase map |
 | `detect-git-changes` | Reads git history and the index to determine refresh scope: date-only, targeted, or full |
-| `write-overview-doc` | Converts the index into `docs/codebase-overview.md` covering all 11 architecture sections |
+| `write-overview-doc` | Converts the index into `.atlas/codebase-overview.md` covering all 11 architecture sections |
 | `generate-diagram` | Produces draw.io XML, Excalidraw JSON, and Mermaid diagrams from the index |
 | `explore-repo-interface` | Extracts what a repo exposes, depends on, and owns — used for cross-repo analysis |
 
@@ -59,10 +59,10 @@ Atlas is a two-layer system of **commands** and **skills**. The Claude Code inte
 
 ### The index is the foundation
 
-When you first run `/codebase-overview`, Atlas explores the repo and writes `docs/codebase-index.json` — a structured map of every file, component, entity, flow, and which documentation section each file feeds into.
+When you first run `/codebase-overview`, Atlas explores the repo and writes `.atlas/codebase-index.json` — a structured map of every file, component, entity, flow, and which documentation section each file feeds into.
 
 ```
-docs/
+.atlas/
   codebase-index.json       ← machine-readable source of truth
   codebase-overview.md      ← human-readable architecture reference
   architecture-diagram.md   ← Mermaid preview (renders in GitHub)
@@ -135,7 +135,7 @@ atlas/
 │       ├── commands/                  # Spec + Claude frontmatter
 │       ├── skills/                    # Spec + Claude frontmatter
 │       └── install.sh
-├── docs/
+├── .atlas/
 │   └── agent-agnostic-guide.md        # How to add a new agent integration
 ├── install.sh                         # Delegates to integrations/claude-code by default
 └── README.md
@@ -195,7 +195,7 @@ git commit -m "Add Atlas commands and skills"
 
 ### Other agents
 
-Atlas ships with a Claude Code integration today. To add support for another agent (Cursor, Copilot, Windsurf, etc.), see [`docs/agent-agnostic-guide.md`](docs/agent-agnostic-guide.md). The core logic lives in `spec/` and requires only a thin wrapper to work with any agent.
+Atlas ships with a Claude Code integration today. To add support for another agent (Cursor, Copilot, Windsurf, etc.), see [`.atlas/agent-agnostic-guide.md`](.atlas/agent-agnostic-guide.md). The core logic lives in `spec/` and requires only a thin wrapper to work with any agent.
 
 ---
 
@@ -207,7 +207,7 @@ Atlas ships with a Claude Code integration today. To add support for another age
 /codebase-overview
 ```
 
-Produces `docs/codebase-index.json` and `docs/codebase-overview.md`. On a large repo, expect 2–4 minutes for the first run. Subsequent runs are significantly faster.
+Produces `.atlas/codebase-index.json` and `.atlas/codebase-overview.md`. On a large repo, expect 2–4 minutes for the first run. Subsequent runs are significantly faster.
 
 ### Refresh after a sprint
 
@@ -225,7 +225,7 @@ Once docs exist, skip the indexing step entirely:
 /ask-atlas "how does the delivery state machine work?"
 ```
 
-Loads `docs/codebase-overview.md` (and `ml-overview.md`, `architecture-diagram.md` if present) and answers immediately — no codebase traversal. Warns if docs are stale.
+Loads `.atlas/codebase-overview.md` (and `ml-overview.md`, `architecture-diagram.md` if present) and answers immediately — no codebase traversal. Warns if docs are stale.
 
 ```
 /ask-atlas --files src/auth/jwt.py "how is the JWT validated?"
@@ -245,7 +245,7 @@ Regenerates all docs first, then enters chat mode.
 /architecture-diagram
 ```
 
-Produces `docs/architecture.drawio` (open in diagrams.net or the VS Code draw.io extension) and `docs/architecture-diagram.md` (renders as Mermaid in GitHub).
+Produces `.atlas/architecture.drawio` (open in diagrams.net or the VS Code draw.io extension) and `.atlas/architecture-diagram.md` (renders as Mermaid in GitHub).
 
 ```
 /architecture-diagram --format both
@@ -302,12 +302,12 @@ OPTIONS
 
 ```
 OPTIONS
-  --output <path>             Override output path (default: docs/codebase-overview.md)
+  --output <path>             Override output path (default: .atlas/codebase-overview.md)
   --focus <area>              Extra depth on one area, e.g. --focus "async pipeline"
   --fresh                     Skip git optimisation — full re-index from scratch
-  --code-only                 Derive everything from code; skip reading existing docs/
-  --with-diagram              Also generate docs/architecture.drawio + Mermaid preview
-  --with-diagram=excalidraw   Also generate docs/architecture.excalidraw
+  --code-only                 Derive everything from code; skip reading existing .atlas/
+  --with-diagram              Also generate .atlas/architecture.drawio + Mermaid preview
+  --with-diagram=excalidraw   Also generate .atlas/architecture.excalidraw
   --with-diagram=both         Generate draw.io + Excalidraw + Mermaid
   --help, -h                  Show help
 ```
@@ -333,7 +333,7 @@ OPTIONS
 
 ```
 OPTIONS
-  --output <path>    Override output path (default: docs/ml-overview.md)
+  --output <path>    Override output path (default: .atlas/ml-overview.md)
   --focus <area>     Extra depth, e.g. --focus "training pipeline"
   --fresh            Write a completely new file from scratch
   --help, -h         Show help
@@ -348,10 +348,10 @@ USAGE
 
 OPTIONS
   --repos-file <path>    Path to repos list file
-  --output <dir>         Override output directory (default: docs/)
+  --output <dir>         Override output directory (default: .atlas/)
   --fresh                Ignore existing output and regenerate
   --no-diagram           Skip diagram files
-  --with-excalidraw      Also generate docs/ecosystem.excalidraw
+  --with-excalidraw      Also generate .atlas/ecosystem.excalidraw
   --focus <area>         Extra depth: impact | data | flows | contracts
   --help, -h             Show help
 ```
@@ -361,8 +361,8 @@ OPTIONS
 ## Tips
 
 - **Use `/ask-atlas` for quick questions.** Once docs exist, it's far cheaper than re-running `/codebase-overview` — it reads the pre-built docs and answers immediately without touching source files.
-- **Commit `docs/codebase-index.json`.** It's the long-term state that makes targeted refresh possible. Without it, every run is a full re-index.
+- **Commit `.atlas/codebase-index.json`.** It's the long-term state that makes targeted refresh possible. Without it, every run is a full re-index.
 - **Run `/codebase-overview` before `/architecture-diagram`.** The diagram command is significantly faster and more accurate when the index already exists.
 - **For hybrid ML repos**, run both `/codebase-overview` and `/ml-overview`. The codebase overview covers service architecture; the ML overview covers model lifecycle.
-- **For a quick visual**, `docs/architecture-diagram.md` renders Mermaid instantly in GitHub — no tool required.
-- **For ecosystem analysis**, if any repo already has a `docs/codebase-index.json`, it's used automatically as a fast-path — no re-exploration needed.
+- **For a quick visual**, `.atlas/architecture-diagram.md` renders Mermaid instantly in GitHub — no tool required.
+- **For ecosystem analysis**, if any repo already has a `.atlas/codebase-index.json`, it's used automatically as a fast-path — no re-exploration needed.
